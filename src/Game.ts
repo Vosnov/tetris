@@ -22,10 +22,28 @@ class Game {
     this.playfield = this.createGrid(rows, cols)
   }
 
+  getMap() {
+    const playfield = this.playfield.map(elem => elem.slice())
+    const activeTetro = this.activeTetro
+      
+    for (let col = 0; col < activeTetro.blocks.length; col++) {
+      for (let row = 0; row < activeTetro.blocks[0].length; row++) {
+        if (activeTetro.blocks[col][row] === 1) {
+          const y = activeTetro.y + col
+          const x = activeTetro.x + row
+
+          playfield[y][x] = activeTetro.blocks[col][row]
+        }
+      }
+    }
+
+    return playfield
+  }
+
   moveTetroDown() {
     this.activeTetro.y += 1
 
-    if (this.isTetroOutOfBounce()) {
+    if (this.isTetroOutOfBounce() || this.hasCllision()) {
       this.activeTetro.y -= 1
       this.lockTetro()
     }
@@ -34,7 +52,7 @@ class Game {
   moveTetroRight() {
     this.activeTetro.x += 1
 
-    if (this.isTetroOutOfBounce()) {
+    if (this.isTetroOutOfBounce() || this.hasCllision()) {
       this.activeTetro.x -= 1
     }
   }
@@ -42,7 +60,7 @@ class Game {
   moveTetroLeft() {
     this.activeTetro.x -= 1
 
-    if (this.isTetroOutOfBounce()) {
+    if (this.isTetroOutOfBounce() || this.hasCllision()) {
       this.activeTetro.x += 1
     }
   }
@@ -53,7 +71,7 @@ class Game {
 
     const temp = this.createGrid(length, length)
 
-    for (let col = 0; length; col++) {
+    for (let col = 0; col < length; col++) {
       for (let row = 0; row < length; row++) {
         temp[row][col] = blocks[length - 1 - col][row]
       }
@@ -62,10 +80,22 @@ class Game {
     this.activeTetro.blocks = temp
   }
 
-  // hasCllision(direction: 'left' | 'right' | 'down') {
+  // Коллизя
+  hasCllision() {
+    const {x, y, blocks} = this.activeTetro
 
-  // }
+    for (let col = 0; col < blocks.length; col++) {
+      for (let row = 0; row < blocks[col].length; row++) {
+        if (blocks[col][row] !== 0) {
+          if(this.playfield[col + y][row + x]) return true
+        }
+      }
+    }
 
+    return false
+  }
+
+  // Выход за пределы карты
   isTetroOutOfBounce() {
     const {x, y, blocks} = this.activeTetro
     const playfield = this.playfield
@@ -91,6 +121,7 @@ class Game {
         .map(() => 0))
   }
 
+  // Фиксация Tetro
   lockTetro() {
     const {x, y, blocks} = this.activeTetro
 
@@ -100,6 +131,15 @@ class Game {
           this.playfield[col + y][row + x] = blocks[col][row]
         }
       }
+    }
+    this.activeTetro =  {
+      x: 0,
+      y: 0,
+      blocks: [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0],
+      ]
     }
   }
 }

@@ -36,7 +36,7 @@ export default class View {
 
           ctx.beginPath()
           ctx.fillStyle = 'white'
-          ctx.fillRect(x, y, this.step, this.step)
+          ctx.fillRect(x + 1, y + 1, this.step - 2, this.step - 2)
         }
       }
     }

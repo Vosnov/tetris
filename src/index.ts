@@ -7,10 +7,6 @@ const node = document.querySelector('.canvas-wrapper')
 const view = new View(node, 20, 10, 30)
 const game = new Game()
 
-// for (let i = 0; i < 30; i++) {
-//   game.moveTetroDown()
-// }
-
 game.rotateTetro()
 
 document.addEventListener('keydown', e => {
@@ -35,7 +31,5 @@ document.addEventListener('keydown', e => {
 })
 
 view.render(game.getMap())
-
-console.log(game)
-
+console.log(game.playfield)
 

@@ -1,4 +1,4 @@
-interface ActiveTetro {
+interface Tetro {
   x: number
   y: number
   blocks: number[][]
@@ -6,19 +6,12 @@ interface ActiveTetro {
 
 class Game {
   playfield: number[][]
-  activeTetro: ActiveTetro
+  activeTetro: Tetro
+  nextTetro: Tetro
 
   constructor(rows = 20, cols = 10) {
-    this.activeTetro = {
-      x: 0,
-      y: 0,
-      blocks: [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 0, 0],
-      ]
-    }
-
+    this.activeTetro = this.createTetro()
+    this.nextTetro = this.createTetro()
     this.playfield = this.createGrid(rows, cols)
   }
 
@@ -78,6 +71,10 @@ class Game {
     }
 
     this.activeTetro.blocks = temp
+
+   if (this.isTetroOutOfBounce() || this.hasCllision()) {
+      this.activeTetro.blocks = blocks
+   }
   }
 
   // Коллизя
@@ -121,6 +118,94 @@ class Game {
         .map(() => 0))
   }
 
+  createTetro(type: null | 1 | 2 | 3 | 4 | 5 | 6 | 7 = null) {
+    const TetroList = [
+      [
+        [0, 0, 0, 0],
+        [1, 1, 1, 1],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [1, 0, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [0, 0, 1],
+        [1, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 1, 1, 0],
+        [0, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0]
+      ],
+      [
+        [0, 1, 1],
+        [1, 1, 0],
+        [0, 0, 0]
+      ]
+    ]
+
+    const randomTetroIndex = Math.floor(Math.random() * TetroList.length)
+
+    const tetro = {
+      x: 3,
+      y: 0,
+      blocks: []
+    }
+
+    switch (type) {
+      case 1:
+        tetro.blocks = TetroList[0]
+        break
+      case 2: 
+        tetro.blocks = TetroList[1]
+        break
+      case 3: 
+        tetro.blocks = TetroList[2]
+        break
+      case 4: 
+        tetro.blocks = TetroList[3]
+        break
+      case 5: 
+        tetro.blocks = TetroList[4]
+        break
+      case 6: 
+        tetro.blocks = TetroList[5]
+        break
+      case 7: 
+        tetro.blocks = TetroList[6]
+        break
+      default:
+        tetro.blocks = TetroList[randomTetroIndex]
+        break
+    }
+
+    return tetro
+  }
+
+  clearLines() {
+    for (let col = this.playfield.length - 1; col >= 0; col--) {
+      if (!this.playfield[col].includes(0)) {
+        this.playfield.splice(col, 1)
+        this.playfield.unshift(new Array(col).fill(0))
+      }
+    }
+  }
+
   // Фиксация Tetro
   lockTetro() {
     const {x, y, blocks} = this.activeTetro
@@ -132,15 +217,11 @@ class Game {
         }
       }
     }
-    this.activeTetro =  {
-      x: 0,
-      y: 0,
-      blocks: [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 0, 0],
-      ]
-    }
+
+    this.clearLines()
+
+    this.activeTetro = this.nextTetro
+    this.nextTetro = this.createTetro()
   }
 }
 

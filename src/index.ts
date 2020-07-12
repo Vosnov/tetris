@@ -1,13 +1,15 @@
 import './style.scss'
 import Game from './Game'
 import View from './View'
+import InfoPanel from './InfoPanel'
 
 const node = document.querySelector('.canvas-wrapper')
 
-const view = new View(node, 20, 10, 30)
+const view = new View(node)
+const infoPanel = new InfoPanel(node)
 const game = new Game()
 
-game.rotateTetro()
+infoPanel.render(game.nextTetro.blocks)
 
 document.addEventListener('keydown', e => {
   switch(e.keyCode) {

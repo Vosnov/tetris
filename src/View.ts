@@ -5,7 +5,7 @@ export default class View {
   rows: number
   step: number
 
-  constructor(node: Element, cols = 10, rows = 20, step = 30) {
+  constructor(node: Element, rows = 10, cols = 20, step = 30) {
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'canvas'
     this.ctx = this.canvas.getContext('2d')

@@ -1,4 +1,4 @@
-interface Tetro {
+export interface Tetro {
   x: number
   y: number
   blocks: number[][]
@@ -8,11 +8,18 @@ class Game {
   playfield: number[][]
   activeTetro: Tetro
   nextTetro: Tetro
+  score: number
+  cols: number
+  rows: number
 
   constructor(rows = 20, cols = 10) {
     this.activeTetro = this.createTetro()
     this.nextTetro = this.createTetro()
     this.playfield = this.createGrid(rows, cols)
+
+    this.score = 0
+    this.cols = cols
+    this.rows = rows
   }
 
   getMap() {
@@ -119,7 +126,7 @@ class Game {
   }
 
   createTetro(type: null | 1 | 2 | 3 | 4 | 5 | 6 | 7 = null) {
-    const TetroList = [
+    const tetroList = [
       [
         [0, 0, 0, 0],
         [1, 1, 1, 1],
@@ -137,10 +144,8 @@ class Game {
         [0, 0, 0]
       ],
       [
-        [0, 0, 0, 0],
-        [0, 1, 1, 0],
-        [0, 1, 1, 0],
-        [0, 0, 0, 0]
+        [1, 1],
+        [1, 1],
       ],
       [
         [0, 1, 0],
@@ -159,51 +164,32 @@ class Game {
       ]
     ]
 
-    const randomTetroIndex = Math.floor(Math.random() * TetroList.length)
+    const randomTetroIndex = Math.floor(Math.random() * tetroList.length)
 
     const tetro = {
       x: 3,
-      y: 0,
-      blocks: []
-    }
-
-    switch (type) {
-      case 1:
-        tetro.blocks = TetroList[0]
-        break
-      case 2: 
-        tetro.blocks = TetroList[1]
-        break
-      case 3: 
-        tetro.blocks = TetroList[2]
-        break
-      case 4: 
-        tetro.blocks = TetroList[3]
-        break
-      case 5: 
-        tetro.blocks = TetroList[4]
-        break
-      case 6: 
-        tetro.blocks = TetroList[5]
-        break
-      case 7: 
-        tetro.blocks = TetroList[6]
-        break
-      default:
-        tetro.blocks = TetroList[randomTetroIndex]
-        break
+      y: randomTetroIndex === 0 ? -1 : 0,
+      blocks: type === null ? tetroList[randomTetroIndex] : tetroList[type]
     }
 
     return tetro
   }
 
   clearLines() {
+    let countDelLines = 0
+
     for (let col = this.playfield.length - 1; col >= 0; col--) {
       if (!this.playfield[col].includes(0)) {
         this.playfield.splice(col, 1)
-        this.playfield.unshift(new Array(col).fill(0))
+        countDelLines++
       }
     }
+
+    for (let i = 0; i < countDelLines; i++) {
+      this.playfield.unshift(new Array(this.cols).fill(0))
+    }
+
+    this.updateScore(countDelLines)
   }
 
   // Фиксация Tetro
@@ -222,6 +208,15 @@ class Game {
 
     this.activeTetro = this.nextTetro
     this.nextTetro = this.createTetro()
+  }
+
+  updateScore(countDelLines: number) {
+    const scoreOneLine = 50
+    const bonus = 3
+
+    this.score += scoreOneLine * Math.pow(countDelLines, bonus)
+
+    console.log(this.score, countDelLines)
   }
 }
 

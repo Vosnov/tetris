@@ -9,8 +9,12 @@ class Game {
   activeTetro: Tetro
   nextTetro: Tetro
   score: number
+  lines: number
+  level: number
   cols: number
   rows: number
+
+  static lastLines = 0
 
   constructor(rows = 20, cols = 10) {
     this.activeTetro = this.createTetro()
@@ -18,6 +22,9 @@ class Game {
     this.playfield = this.createGrid(rows, cols)
 
     this.score = 0
+    this.lines = 0
+    this.level = 1
+
     this.cols = cols
     this.rows = rows
   }
@@ -211,12 +218,27 @@ class Game {
   }
 
   updateScore(countDelLines: number) {
-    const scoreOneLine = 50
-    const bonus = 3
+    switch(countDelLines) {
+      case 1:
+        this.score += 100
+        break
+      case 2:
+        this.score += 300
+        break
+      case 3:
+        this.score += 700
+        break
+      case 4:
+        this.score += 1500
+        break
+    }
 
-    this.score += scoreOneLine * Math.pow(countDelLines, bonus)
+    this.lines += countDelLines > 0 ? countDelLines : 0
 
-    console.log(this.score, countDelLines)
+    if (this.lines % 10 === 0 && Game.lastLines !== this.lines) {
+      this.level += 1
+      Game.lastLines = this.lines
+    }
   }
 }
 

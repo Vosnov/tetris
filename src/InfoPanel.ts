@@ -15,10 +15,9 @@ export default class InfoPanel {
     elem.appendChild(this.canvas)
   }
 
-  render(nextTetro: number [][]) {
+  render(nextTetro: number [][], score: number, lines: number, level: number) {
     const fontSize = 20
-    const margin = 10
-    const textCords = fontSize + margin
+    const margin = 30
 
     this.ctx.beginPath()
     this.ctx.fillStyle = 'black'
@@ -30,12 +29,12 @@ export default class InfoPanel {
     this.ctx.fillStyle = 'white'
     this.ctx.font = `${fontSize}px Arial`
 
-    this.ctx.fillText(`Score`, 0, 0)
-    this.ctx.fillText(`Lines`, 0, textCords)
-    this.ctx.fillText(`Level`, 0, textCords * 2)
-    this.ctx.fillText(`Next`, 0, textCords * 3)
+    this.ctx.fillText(`Score: ${score}`, 0, 0)
+    this.ctx.fillText(`Lines: ${lines}`, 0, margin)
+    this.ctx.fillText(`Level: ${level}`, 0, margin * 2)
+    this.ctx.fillText(`Next:`, 0, margin * 3)
 
-    this.renderTetro(nextTetro, textCords * 4)
+    this.renderTetro(nextTetro, margin * 4)
   }
 
   renderTetro(nextTetro: number[][], textCords: number) {

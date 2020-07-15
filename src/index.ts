@@ -9,29 +9,41 @@ const view = new View(node)
 const infoPanel = new InfoPanel(node)
 const game = new Game()
 
-infoPanel.render(game.nextTetro.blocks)
+view.renderStartScreen()
+view.renderEndScreen(20)
 
 document.addEventListener('keydown', e => {
   switch(e.keyCode) {
     case 37:
       game.moveTetroLeft()
-      view.render(game.getMap())
+      render()
       break
     case 38:
       game.rotateTetro()
-      view.render(game.getMap())
+      render()
       break
     case 39:
       game.moveTetroRight()
-      view.render(game.getMap())
+      render()
       break
     case 40:
       game.moveTetroDown()
-      view.render(game.getMap())
+      render()
       break
   }
 })
 
-view.render(game.getMap())
+function render() {
+  const nextTetro = game.nextTetro.blocks
+  const {
+    score,
+    lines,
+    level
+  } = game
+
+  view.render(game.getMap())
+  infoPanel.render(nextTetro, score, lines, level)
+}
+
 console.log(game.playfield)
 

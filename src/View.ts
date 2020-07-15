@@ -20,6 +20,49 @@ export default class View {
     node.appendChild(this.canvas)
   }
 
+  renderStartScreen() {
+    const ctx = this.ctx
+    const fontSize = 20
+    const canvas = this.canvas
+
+    ctx.beginPath()
+    ctx.fillStyle = 'black'
+    ctx.fillRect(0,0, canvas.width, canvas.height)
+
+    ctx.beginPath()
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'top'
+    ctx.fillStyle = 'white'
+    ctx.font = `${fontSize}px Arial`
+
+    ctx.fillText(`Press Enter to Start`, canvas.width / 2, canvas.height / 2)
+  }
+
+  renderEndScreen(score: number) {
+    const ctx = this.ctx
+    const canvas = this.canvas
+
+    const fontSize = 20
+    const margin = 30 
+
+    const x = canvas.width / 2
+    const y = canvas.height / 2
+
+    ctx.beginPath()
+    ctx.fillStyle = 'black'
+    ctx.fillRect(0,0, canvas.width, canvas.height)
+
+    ctx.beginPath()
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'top'
+    ctx.fillStyle = 'white'
+    ctx.font = `${fontSize}px Arial`
+
+    ctx.fillText(`GAME OVER`, x, y - margin)
+    ctx.fillText(`Your Score: ${score}`, x, y)
+    ctx.fillText(`Press Enter to Restart`, x, y + margin)
+  }
+
   render(map: number[][]) {
     const ctx = this.ctx
     const canvas = this.canvas

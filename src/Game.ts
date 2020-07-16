@@ -13,8 +13,7 @@ class Game {
   level: number
   cols: number
   rows: number
-
-  static lastLines = 0
+  gameOver: boolean
 
   constructor(rows = 20, cols = 10) {
     this.activeTetro = this.createTetro()
@@ -24,9 +23,21 @@ class Game {
     this.score = 0
     this.lines = 0
     this.level = 1
+    this.gameOver = false
 
     this.cols = cols
     this.rows = rows
+  }
+
+  restart() {
+    this.activeTetro = this.createTetro()
+    this.nextTetro = this.createTetro()
+    this.playfield = this.createGrid(this.rows, this.cols)
+
+    this.score = 0
+    this.lines = 0
+    this.level = 1
+    this.gameOver = false
   }
 
   getMap() {
@@ -214,7 +225,11 @@ class Game {
     this.clearLines()
 
     this.activeTetro = this.nextTetro
-    this.nextTetro = this.createTetro()
+    if (!this.isGameOver()) {
+      this.nextTetro = this.createTetro()
+    } else {
+      this.gameOver = true
+    }
   }
 
   updateScore(countDelLines: number) {
@@ -234,11 +249,11 @@ class Game {
     }
 
     this.lines += countDelLines > 0 ? countDelLines : 0
+    this.level = Math.ceil(this.lines / 10) + 1
+  }
 
-    if (this.lines % 10 === 0 && Game.lastLines !== this.lines) {
-      this.level += 1
-      Game.lastLines = this.lines
-    }
+  isGameOver() {
+    return !!this.playfield[0].find(elem => elem !== 0)
   }
 }
 

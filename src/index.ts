@@ -17,7 +17,5 @@ const control = new Control(game, view, infoPanel)
 // view.renderEndScreen(20)
 
 
-
-
 console.log(game.playfield)
 

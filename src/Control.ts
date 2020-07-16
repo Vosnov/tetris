@@ -24,7 +24,7 @@ export default class Control {
 
   handleKeyUp(e: KeyboardEvent) {
     if (e.keyCode === 40) {
-      this.startTimer(1000)
+      this.startTimer()
     }
   }
 
@@ -58,11 +58,11 @@ export default class Control {
     }
   }
 
-  startTimer(time: number) {
+  startTimer() {
     this.interval = setInterval(() => {
       this.game.moveTetroDown()
       this.render()
-    }, time)
+    }, this.game.speed)
   }
 
   gameStart() {
@@ -71,7 +71,7 @@ export default class Control {
     this.isStart = true
     this.render()
 
-    this.startTimer(1000)
+    this.startTimer()
   }
 
   render() {

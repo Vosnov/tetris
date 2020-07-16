@@ -13,17 +13,11 @@ class Game {
   level: number
   cols: number
   rows: number
+  speed: number
   gameOver: boolean
 
   constructor(rows = 20, cols = 10) {
-    this.activeTetro = this.createTetro()
-    this.nextTetro = this.createTetro()
-    this.playfield = this.createGrid(rows, cols)
-
-    this.score = 0
-    this.lines = 0
-    this.level = 1
-    this.gameOver = false
+    this.restart()
 
     this.cols = cols
     this.rows = rows
@@ -37,6 +31,7 @@ class Game {
     this.score = 0
     this.lines = 0
     this.level = 1
+    this.speed = 1000
     this.gameOver = false
   }
 
@@ -249,7 +244,8 @@ class Game {
     }
 
     this.lines += countDelLines > 0 ? countDelLines : 0
-    this.level = Math.ceil(this.lines / 10) + 1
+    this.level = Math.floor(this.lines / 10) + 1
+    this.speed = this.speed - (this.level * 50)
   }
 
   isGameOver() {

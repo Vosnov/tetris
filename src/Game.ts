@@ -257,16 +257,16 @@ class Game {
   updateScore(countDelLines: number) {
     switch(countDelLines) {
       case 1:
-        this.score += 100
+        this.score += 400
         break
       case 2:
-        this.score += 300
+        this.score += 1350
         break
       case 3:
-        this.score += 700
+        this.score += 2200
         break
       case 4:
-        this.score += 1500
+        this.score += 3650
         break
     }
 

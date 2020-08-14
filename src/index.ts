@@ -13,9 +13,3 @@ const game = new Game()
 const control = new Control(game, view, infoPanel)
 
 
-// view.renderStartScreen()
-// view.renderEndScreen(20)
-
-
-console.log(game.playfield)
-

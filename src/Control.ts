@@ -59,9 +59,16 @@ export default class Control {
   }
 
   startTimer() {
+    const lastSpeed = this.game.speed
+
     this.interval = setInterval(() => {
       this.game.moveTetroDown()
       this.render()
+
+      if (lastSpeed !== this.game.speed) {
+        clearInterval(this.interval)
+        this.startTimer()
+      }
     }, this.game.speed)
   }
 

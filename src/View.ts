@@ -1,3 +1,5 @@
+import { EColors } from "./Game"
+
 export default class View {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
@@ -73,12 +75,12 @@ export default class View {
 
     for(let col = 0; col < map.length; col++) {
       for(let row = 0; row < map[0].length; row++) {
-        if (map[col][row] === 1) {
+        if (map[col][row] !== 0) {
           const x = row * this.step
           const y = col * this.step
 
           ctx.beginPath()
-          ctx.fillStyle = 'white'
+          ctx.fillStyle = EColors[map[col][row]]
           ctx.fillRect(x + 1, y + 1, this.step - 2, this.step - 2)
         }
       }

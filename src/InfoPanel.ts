@@ -1,3 +1,5 @@
+import { EColors } from "./Game"
+
 export default class InfoPanel {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
@@ -40,13 +42,13 @@ export default class InfoPanel {
   renderTetro(nextTetro: number[][], textCords: number) {
     for(let col = 0; col < nextTetro.length; col++) {
       for(let row = 0; row < nextTetro[0].length; row++) {
-        if (nextTetro[col][row] === 1) {
+        if (nextTetro[col][row] !== 0) {
           const x = row * (this.step / 2)
           const y = col * (this.step / 2)
           const size = (this.step / 2) - 2
 
           this.ctx.beginPath()
-          this.ctx.fillStyle = 'white'
+          this.ctx.fillStyle = EColors[nextTetro[col][row]]
           this.ctx.fillRect(x, y + textCords, size, size)
         }
       }

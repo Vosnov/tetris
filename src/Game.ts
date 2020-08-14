@@ -4,6 +4,16 @@ export interface Tetro {
   blocks: number[][]
 }
 
+export enum EColors {
+  'white' = 1,
+  '#ffff00' = 2,
+  '#8b00ff' = 3,
+  'green' = 4,
+  '#ffc0cb' = 5,
+  '#0000ff' = 6,
+  '#42aaff' = 7
+}
+
 class Game {
   playfield: number[][]
   activeTetro: Tetro
@@ -41,7 +51,7 @@ class Game {
       
     for (let col = 0; col < activeTetro.blocks.length; col++) {
       for (let row = 0; row < activeTetro.blocks[0].length; row++) {
-        if (activeTetro.blocks[col][row] === 1) {
+        if (activeTetro.blocks[col][row] !== 0) {
           const y = activeTetro.y + col
           const x = activeTetro.x + row
 
@@ -177,7 +187,13 @@ class Game {
       ]
     ]
 
-    const randomTetroIndex = Math.floor(Math.random() * tetroList.length)
+    const randomTetroIndex = Math.floor(Math.random() * tetroList.length) 
+
+    if (type) {
+      this.painBlock(type, tetroList[type])
+    } else {
+      this.painBlock(randomTetroIndex, tetroList[randomTetroIndex])
+    }
 
     const tetro = {
       x: 3,
@@ -186,6 +202,17 @@ class Game {
     }
 
     return tetro
+  }
+
+  // Покрас блока
+  painBlock(type =  1 | 2 | 3 | 4 | 5 | 6 | 7, tetro: number[][]) {
+    for (let col in tetro) {
+      for(let row in tetro[col]) {
+        if (tetro[col][row]) {
+          tetro[col][row] = type
+        }
+      }
+    }
   }
 
   clearLines() {
@@ -243,9 +270,17 @@ class Game {
         break
     }
 
+    const lastLevel = this.level
+    const speedLock = 50
+
     this.lines += countDelLines > 0 ? countDelLines : 0
     this.level = Math.floor(this.lines / 10) + 1
-    this.speed = this.speed - (this.level * 50)
+  
+    if (lastLevel !== this.level && this.speed > speedLock) {
+      this.speed -= speedLock
+    }
+
+    console.log(this.speed)
   }
 
   isGameOver() {
